@@ -1,71 +1,237 @@
-1. package com.example.sqlite;
-2.
-3. import androidx.appcompat.app.AppCompatActivity;
-4.
-5. import android.os.Bundle;
-6. import android.view.View;
-7. import android.widget.Button;
-8. import android.widget.EditText;
-9. import android.widget.TextView;
-10. import android.widget.Toast;
-11.
-12. public class MainActivity extends AppCompatActivity {
-13. EditText user,pass;
-14. Button register,delete,update,display;
-15. DBHelper dbHelper;
-16. TextView res;
-17. private static final String dbName="studentdb";
-18. private static final String tbName="student" ;
-19. private static final int dbVersion = 1 ;
-20. @Override
-21. protected void onCreate(Bundle savedInstanceState) {
-22. super.onCreate(savedInstanceState);
-23. setContentView(R.layout.activity_main);
-24. user=findViewById(R.id.username);
-25. pass=findViewById(R.id.password);
-26. register=findViewById(R.id.register);
-27. delete=findViewById(R.id.delete);
-28. update=findViewById(R.id.update);
-29. display=findViewById(R.id.display);
-30. res=findViewById(R.id.result);
-31. register.setOnClickListener(new View.OnClickListener() {
-32. @Override
-33. public void onClick(View view) {
-34. dbHelper=new DBHelper(MainActivity.this, dbName,null,dbVersion);
-35. long val = dbHelper.adduser(user.getText().toString(),
-pass.getText().toString()) ;
-36. if(val == -1)
-37. Toast.makeText(MainActivity.this, "Error in adding user",
-38. Toast.LENGTH_SHORT).show();
-39. else {
-40. Toast.makeText(MainActivity.this, "USER REGISTERED",
-41. Toast.LENGTH_SHORT).show();
-42. }
-43. }
-44. });
-45. update.setOnClickListener(new View.OnClickListener() {
-46. @Override
-47. public void onClick(View v) {
-48. dbHelper = new DBHelper(MainActivity.this, dbName, null, dbVersion) ;
-49. dbHelper.update(user.getText().toString(), pass.getText().toString());
-50.
-51. }
-52. });
-53. delete.setOnClickListener(new View.OnClickListener() {
-54. @Override
-55. public void onClick(View v) {
-56. dbHelper = new DBHelper(MainActivity.this, dbName,null, dbVersion) ;
-57. dbHelper.delete(user.getText().toString());
-58. }
-59. });
-60. res.setOnClickListener(new View.OnClickListener() {
-61. @Override
-62. public void onClick(View view) {
-63. dbHelper = new DBHelper(MainActivity.this, dbName, null, dbVersion);
-64. String out= dbHelper.display(MainActivity.this);
-65. res.setText(out);
-66. }
-67. });
-68.
-69. }
-70. }
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/uname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Username"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.123" />
+
+    <EditText
+        android:id="@+id/pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="Password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.287" />
+
+    <Button
+        android:id="@+id/ins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.428" />
+
+    <Button
+        android:id="@+id/del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.565" />
+
+    <Button
+        android:id="@+id/dis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.784" />
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="261dp"
+        android:layout_height="49dp"
+        android:hint="Display"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.566"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.884" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+Main.java 
+
+package com.example.sqlite;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    EditText uname,pass;
+    TextView txt;
+    Button ins,del,dis,upd;
+    dbhelper helper;
+    private static final String dbname="comp";
+    private static final String tbname = "employ";
+    private static final int dbversion =1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        uname=findViewById(R.id.uname);
+        pass=findViewById(R.id.pwd);
+        ins=findViewById(R.id.ins);
+        del=findViewById(R.id.del);
+        dis=findViewById(R.id.dis);
+        upd=findViewById(R.id.update);
+        txt=findViewById(R.id.txt);
+
+        ins.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helper=new dbhelper(MainActivity.this,dbname,null,dbversion);
+
+                long lo=helper.adduser(uname.getText().toString(),pass.getText().toString());
+                if(lo==-1)
+                    Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "Inserted", Toast.LENGTH_SHORT).show();
+            }
+        });
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helper=new dbhelper(MainActivity.this,dbname,null,dbversion);
+                helper.delete(uname.getText().toString());
+            }
+        });
+        upd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helper=new dbhelper(MainActivity.this,dbname,null,dbversion);
+                helper.update(uname.getText().toString(),pass.getText().toString());
+            }
+        });
+        dis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                helper=new dbhelper(MainActivity.this,dbname,null,dbversion);
+                String res= helper.display(MainActivity.this);
+                txt.setText(res);
+            }
+        });
+    }
+}
+
+
+
+
+dbhelper.java
+
+
+package com.example.sqlite;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.annotation.Nullable;
+
+public class dbhelper extends SQLiteOpenHelper {
+
+    private static final String dbname="comp";
+    private static final String tbname = "employ";
+    private static final int dbversion =1;
+    public dbhelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, dbname,null, dbversion);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("CREATE TABLE "+tbname+"(uname VARCHAR(10),passw VARCHAR(10))"+";");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+tbname);
+        onCreate(sqLiteDatabase);
+    }
+    public long adduser(String name, String pass){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("uname",name);
+        cv.put("passw",pass);
+        long result = sqLiteDatabase.insert(tbname,null,cv);
+        sqLiteDatabase.close();
+        return result;
+    }
+    public void update(String name, String pass){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("UPDATE "+tbname+" SET passw='"+pass+"' "+" WHERE uname='"+name+"'");
+        sqLiteDatabase.close();
+    }
+    public void delete(String name)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("DELETE FROM " + tbname + " WHERE uname='" + name+"'");
+        sqLiteDatabase.close();
+    }
+    public String display(Context ctx)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+tbname,null);
+        String finalres = " ";
+        while(cursor.moveToNext()) {
+            finalres += cursor.getString(0) + ":" + cursor.getString(1);
+            System.out.println("");
+        }
+        return finalres;
+    }
+}
