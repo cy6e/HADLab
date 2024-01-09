@@ -1,72 +1,153 @@
-1. package com.example.mediaplayer;
-2. import androidx.appcompat.app.AppCompatActivity;
-3. import android.media.MediaPlayer;
-4. import android.os.Bundle;
-5. import android.view.View;
-6. import android.widget.Button;
-7. import android.widget.Toast;
-8. public class MainActivity extends AppCompatActivity {
-9. Button play, forward, rewind, pause, stop, reset;
-10. MediaPlayer mediaPlayer ;
-11. int starttime = 0 ; // startime is 0s
-12. int stopttime = 0; // stoptime is 0s by default
-13. int forwardtime = 5000 ; // 5s for forward
-14. int backwardtime = 5000 ; // 5s for backwardtime
-15. @Override
-16. protected void onCreate(Bundle savedInstanceState) {
-17. super.onCreate(savedInstanceState);
-18. setContentView(R.layout.activity_main);
-19. play= findViewById(R.id.play);
-20. pause= findViewById(R.id.pause);
-21. stop= findViewById(R.id.stop);
-22. forward= findViewById(R.id.forward);
-23. rewind= findViewById(R.id.rewind);
-24. reset= findViewById(R.id.restart);
-25. play.setOnClickListener(new View.OnClickListener() {
-26. @Override
-27. public void onClick(View view) {
-28. Toast.makeText(MainActivity.this, "Playing Media Now",
-29. Toast.LENGTH_SHORT).show();
-30. mediaPlayer=MediaPlayer.create(MainActivity.this,R.raw.charlie);
-31. mediaPlayer.start();
-32. }
-33. });
-34. pause.setOnClickListener(new View.OnClickListener() {
-35. @Override
-36. public void onClick(View view) {
-37. mediaPlayer.pause();
-38. }
-39. });
-40. reset.setOnClickListener(new View.OnClickListener() {
-41. @Override
-42. public void onClick(View view) {
-43. mediaPlayer.seekTo(starttime);
-44. mediaPlayer.start();
-45. }
-46. });
-47. forward.setOnClickListener(new View.OnClickListener() {
-48. @Override
-49. public void onClick(View view) {
-50. int currpos=mediaPlayer.getCurrentPosition();
-51. if((currpos+forwardtime)<=(stopttime=mediaPlayer.getDuration())){
-52. mediaPlayer.seekTo(currpos+forwardtime);
-53. }
-54. }
-55. });
-56. rewind.setOnClickListener(new View.OnClickListener() {
-57. @Override
-58. public void onClick(View view) {
-59. int currpos=mediaPlayer.getCurrentPosition();
-60. if((currpos-backwardtime)<=(starttime)){
-61. mediaPlayer.seekTo(currpos-backwardtime);
-62. }
-63. }
-64. });
-65. stop.setOnClickListener(new View.OnClickListener() {
-66. @Override
-67. public void onClick(View view) {
-68. mediaPlayer.stop();
-69. }
-70. });
-71. }
-72. }
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#7712"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
+        android:textAlignment="center"
+        android:layout_marginBottom="40dp"
+        android:textSize="40sp"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"/>
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:onClick="play"
+        android:padding="10dp"
+        android:text="Play"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/pause"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:onClick="pause"
+        android:padding="10dp"
+        android:text="Pause"
+        android:textAlignment="center" />
+
+
+
+    <Button
+        android:id="@+id/fwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:onClick="forward"
+        android:padding="10dp"
+        android:text="Forward"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/rewind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:onClick="rewind"
+        android:padding="10dp"
+        android:text="Rewind"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/restart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="70dp"
+        android:onClick="restart"
+        android:padding="10dp"
+        android:text="Restart"
+        android:textAlignment="center" />
+
+</LinearLayout>
+
+
+
+
+
+package com.example.myapplication;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import android.media.MediaPlayer;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    MediaPlayer media;
+
+    int starttime=0;
+    int fwdrate=5000;
+    int backwardrate=5000;
+
+    public void play(View view){
+        Toast.makeText(this, "Playing", Toast.LENGTH_SHORT).show();
+        media.start();
+    }
+    public void pause(View view){
+        Toast.makeText(this, "Pausing", Toast.LENGTH_SHORT).show();
+        media.pause();
+    }
+    public void forward(View view){
+        int dur=media.getDuration();
+        int cur=media.getCurrentPosition();
+        if(cur+fwdrate<=dur){
+            media.seekTo(cur+fwdrate);
+        }
+        else{
+            Toast.makeText(this, "Song is about to complete in 5 secs", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void rewind(View view){
+        int cur=media.getCurrentPosition();
+        if(cur-backwardrate>=starttime){
+            media.seekTo(cur-backwardrate);
+        }
+        else{
+            Toast.makeText(this, "Wait for 5 secs", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public void restart(View view){
+        if(media.isPlaying()){
+            media.stop();
+        }
+        media.seekTo(starttime);
+        media.start();
+    }
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        media = MediaPlayer.create(this,R.raw.music1);
+    }
+
+
+}
